@@ -2,7 +2,6 @@
 -- Requires secure.http_mods = donor_accounts in the Luanti server configuration.
 
 local MOD = core.get_current_modname()
-local storage = core.get_mod_storage()
 local http = core.request_http_api()
 
 local API_KEY = "AIzaSyCf1UO6hrlYXR2GYcgGZUfsbit4Zav1m4E"
@@ -15,6 +14,10 @@ local function tr(s)
 	return core.formspec_escape(s)
 end
 
+local function trim(s)
+	return (s or ""):gsub("^%s+", ""):gsub("%s+$", "")
+end
+
 local function show_form(player, page, message)
 	local name = player:get_player_name()
 	local msg = message and ("label[0.5,0.35;" .. tr(message) .. "]") or ""
@@ -22,8 +25,8 @@ local function show_form(player, page, message)
 	if page == "register" then
 		fs = "formspec_version[6]size[8,7]label[0.5,0.3;Donorcraft — создание аккаунта]" .. msg ..
 			"field[0.6,1.7;6.8,0.8;email;Электронная почта;]" ..
-			"field[0.6,2.9;6.8,0.8;password;Пароль (не менее 6 символов);]" ..
-			"field[0.6,4.1;6.8,0.8;confirm;Повторите пароль;]" ..
+			"pwdfield[0.6,2.9;6.8,0.8;password;Пароль (не менее 6 символов);]" ..
+			"pwdfield[0.6,4.1;6.8,0.8;confirm;Повторите пароль;]" ..
 			"button[0.6,5.3;3.2,0.8;create;Создать аккаунт]" ..
 			"button_exit[4.2,5.3;3.2,0.8;back;Назад]"
 	elseif page == "reset" then
@@ -34,7 +37,7 @@ local function show_form(player, page, message)
 	else
 		fs = "formspec_version[6]size[8,6]label[0.5,0.3;Donorcraft — вход в аккаунт]" .. msg ..
 			"field[0.6,1.7;6.8,0.8;email;Электронная почта;]" ..
-			"field[0.6,2.9;6.8,0.8;password;Пароль;]" ..
+			"pwdfield[0.6,2.9;6.8,0.8;password;Пароль;]" ..
 			"button[0.6,4.1;3.2,0.8;login;Войти]" ..
 			"button[4.2,4.1;3.2,0.8;register;Регистрация]" ..
 			"button[0.6,5.0;6.8,0.7;reset;Забыли пароль? Восстановить]"
@@ -132,7 +135,7 @@ core.register_on_player_receive_fields(function(player, formname, fields)
 	if fields.back then show_form(player, "login") return true end
 
 	if fields.create then
-		local email = (fields.email or ""):trim()
+		local email = trim(fields.email)
 		local password = fields.password or ""
 		if #email < 5 or not email:find("@", 1, true) or #password < 6 then
 			show_form(player, "register", "Проверьте почту и пароль (минимум 6 символов).")
