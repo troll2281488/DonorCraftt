@@ -51,3 +51,5 @@ def main():
 
 if __name__ == "__main__":
     main()
+
+# Sync script revision: retrigger the texture replacement workflow on main.
