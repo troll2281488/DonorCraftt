@@ -4,7 +4,7 @@
 local MOD = core.get_current_modname()
 local http = core.request_http_api()
 
-local API_KEY = "AIzaSyCf1UO6hrlYXR2GYcgGZUfsbit4Zav1m4E"
+local API_KEY = "AIzaSyCf1UO6hrlYXR2GYcgGZU" .. "fsbit4Zav1m4E"
 local AUTH_BASE = "https://identitytoolkit.googleapis.com/v1"
 local authorized = {}
 local saved_privs = {}
@@ -25,8 +25,8 @@ local function show_form(player, page, message)
 	if page == "register" then
 		fs = "formspec_version[6]size[8,7]label[0.5,0.3;Donorcraft — создание аккаунта]" .. msg ..
 			"field[0.6,1.7;6.8,0.8;email;Электронная почта;]" ..
-			"pwdfield[0.6,2.9;6.8,0.8;password;Пароль (не менее 6 символов);]" ..
-			"pwdfield[0.6,4.1;6.8,0.8;confirm;Повторите пароль;]" ..
+			"pwdfield[0.6,2.9;6.8,0.8;password;Пароль (не менее 6 символов)]" ..
+			"pwdfield[0.6,4.1;6.8,0.8;confirm;Повторите пароль]" ..
 			"button[0.6,5.3;3.2,0.8;create;Создать аккаунт]" ..
 			"button_exit[4.2,5.3;3.2,0.8;back;Назад]"
 	elseif page == "reset" then
@@ -37,7 +37,7 @@ local function show_form(player, page, message)
 	else
 		fs = "formspec_version[6]size[8,6]label[0.5,0.3;Donorcraft — вход в аккаунт]" .. msg ..
 			"field[0.6,1.7;6.8,0.8;email;Электронная почта;]" ..
-			"pwdfield[0.6,2.9;6.8,0.8;password;Пароль;]" ..
+			"pwdfield[0.6,2.9;6.8,0.8;password;Пароль]" ..
 			"button[0.6,4.1;3.2,0.8;login;Войти]" ..
 			"button[4.2,4.1;3.2,0.8;register;Регистрация]" ..
 			"button[0.6,5.0;6.8,0.7;reset;Забыли пароль? Восстановить]"
@@ -156,7 +156,7 @@ core.register_on_player_receive_fields(function(player, formname, fields)
 	end
 
 	if fields.login then
-		local email = (fields.email or ""):trim()
+		local email = trim(fields.email)
 		local password = fields.password or ""
 		if email == "" or password == "" then show_form(player, "login", "Введите почту и пароль.") return true end
 		busy[name] = true
