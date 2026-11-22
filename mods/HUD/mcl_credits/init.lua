@@ -3,7 +3,7 @@ local S = core.get_translator(modname)
 
 mcl_credits = {
 	players = {},
-	description = S("A faithful Open Source clone of Minecraft"),
+	description = S("A survival sandbox game by Donorcraft"),
 	people = dofile(core.get_modpath(modname) .. "/people.lua"),
 }
 
@@ -57,9 +57,10 @@ function mcl_credits.show(player)
 		},
 	}
 	add_hud_element({
-		type = "image",
-		text = "mineclonia_logo.png",
-		scale = {x = 1, y = 1},
+		type = "text",
+		text = "Donorcraft",
+		number = 0xFFFFFF,
+		scale = {x = 6, y = 6},
 	}, huds, 300)
 	add_hud_element({
 		type = "text",
@@ -87,11 +88,7 @@ function mcl_credits.show(player)
 		end
 		y = y + 200
 	end
-	huds.icon = add_hud_element({
-		type = "image",
-		text = "mineclonia_icon.png",
-		scale = {x = 1, y = 1},
-	}, huds, y)
+
 	mcl_credits.players[name] = huds
 end
 
@@ -149,7 +146,7 @@ core.register_globalstep(function(_)
 end)
 
 core.register_chatcommand("endcredits", {
-	description = S("Show the Mineclonia end credits"),
+	description = S("Show the Donorcraft end credits"),
 	func = function(name, _)
 		mcl_credits.show(core.get_player_by_name(name))
 
