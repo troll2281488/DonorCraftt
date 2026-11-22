@@ -1,0 +1,30 @@
+name: Import YAGEY textures
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - "yagey.zip"
+      - ".github/workflows/import-yagey.yml"
+
+permissions:
+  contents: write
+
+jobs:
+  import:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Donorcraft
+        uses: actions/checkout@v4
+      - name: Import unambiguous texture matches
+        run: python3 tools/import_yagey_textures.py
+      - name: Commit imported textures
+        run: |
+          if git diff --quiet; then
+            echo "No unambiguous texture matches to import."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add mods
+          git commit -m "Import matching textures from YAGEY pack"
+          git push
