@@ -24,11 +24,11 @@ jobs:
         with:
           repository: ItsBrian/minecraft-textures
           ref: main
-          path: /tmp/itsbrian-textures
+          path: itsbrian-textures
           fetch-depth: 1
       - name: Replace matching block textures
         run: |
-          python3 tools/sync_itsbrian_block_textures.py --source /tmp/itsbrian-textures/block --repo .
+          python3 tools/sync_itsbrian_block_textures.py --source itsbrian-textures/block --repo .
       - name: Commit texture replacement
         run: |
           if git diff --quiet -- mods/ITEMS; then
