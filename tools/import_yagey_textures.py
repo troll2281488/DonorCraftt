@@ -1,8 +1,10 @@
 #!/usr/bin/env python3
-"""Import YAGEY Minecraft-style assets into matching Donorcraft texture slots.
+"""Import YAGEY PNGs into existing Donorcraft texture slots.
 
-Only unambiguous basename matches are copied. Ambiguous or unmatched assets are
-reported instead of overwriting unrelated textures.
+A source texture is copied to every exact basename/suffix match within its
+asset category's allowed mod groups. This handles duplicated shared textures
+(e.g. the same block image shipped by CORE and ITEMS) instead of skipping them.
+Files with no compatible target are reported and left untouched.
 """
 from pathlib import Path
 from zipfile import ZipFile
@@ -31,60 +33,78 @@ CATEGORY_SCOPES = {
 def main():
     if not ARCHIVE.is_file():
         raise SystemExit("yagey.zip was not found in repository root")
+
     targets = {}
-    for p in TEXTURE_ROOT.rglob("*.png"):
-        if "textures" not in p.parts:
+    for path in TEXTURE_ROOT.rglob("*.png"):
+        if "textures" not in path.parts:
             continue
         try:
-            group = p.parts[p.parts.index("mods") + 1]
+            group = path.parts[path.parts.index("mods") + 1]
         except (ValueError, IndexError):
             continue
-        targets.setdefault(group, []).append(p)
+        targets.setdefault(group, []).append(path)
 
-    copied, ambiguous, missing = [], [], []
-    with ZipFile(ARCHIVE) as z:
-        for info in z.infolist():
+    copied_sources = 0
+    changed_targets = set()
+    unchanged_targets = set()
+    unmatched = []
+    ambiguous_sources = 0
+
+    with ZipFile(ARCHIVE) as archive:
+        bad = archive.testzip()
+        if bad:
+            raise SystemExit(f"Corrupt ZIP entry: {bad}")
+
+        for info in archive.infolist():
             if info.is_dir() or not info.filename.lower().endswith(".png"):
                 continue
             parts = Path(info.filename).parts
-            if len(parts) < 2 or parts[0].lower() not in CATEGORY_SCOPES:
+            if len(parts) < 2:
                 continue
             category = parts[0].lower()
-            source_name = Path(parts[-1]).name.lower()
-            stem = source_name[:-4]
-            candidates = []
+            if category not in CATEGORY_SCOPES:
+                continue
+
+            source_stem = Path(parts[-1]).stem.lower()
+            matches = []
             for group in CATEGORY_SCOPES[category]:
                 for target in targets.get(group, ()):
-                    name = target.name.lower()
-                    target_stem = name[:-4] if name.endswith(".png") else name
-                    if target_stem == stem or target_stem.endswith("_" + stem):
-                        candidates.append(target)
-            # A source file is copied only when exactly one target slot matches.
-            unique = sorted(set(candidates))
-            if len(unique) == 1:
-                dest = unique[0]
-                dest.parent.mkdir(parents=True, exist_ok=True)
-                with z.open(info) as src, dest.open("wb") as out:
-                    shutil.copyfileobj(src, out)
-                copied.append((info.filename, str(dest)))
-            elif unique:
-                ambiguous.append((info.filename, len(unique)))
-            else:
-                missing.append(info.filename)
+                    target_stem = target.stem.lower()
+                    if target_stem == source_stem or target_stem.endswith("_" + source_stem):
+                        matches.append(target)
 
-    print(f"YAGEY import: copied={len(copied)}, ambiguous={len(ambiguous)}, unmatched={len(missing)}")
-    if copied:
-        print("First imported files:")
-        for src, dst in copied[:25]:
-            print(f"  {src} -> {dst}")
-    if ambiguous:
-        print("Ambiguous matches (left unchanged):")
-        for src, count in ambiguous[:25]:
-            print(f"  {src}: {count} candidates")
-    if missing:
-        print("Unmatched source files (not silently forced into unrelated slots):")
-        for src in missing[:25]:
-            print(f"  {src}")
+            matches = sorted(set(matches))
+            if not matches:
+                unmatched.append(info.filename)
+                continue
+            if len(matches) > 1:
+                ambiguous_sources += 1
+
+            with archive.open(info) as src:
+                data = src.read()
+            for target in matches:
+                target.parent.mkdir(parents=True, exist_ok=True)
+                if target.exists() and target.read_bytes() == data:
+                    unchanged_targets.add(str(target))
+                    continue
+                target.write_bytes(data)
+                changed_targets.add(str(target))
+            copied_sources += 1
+
+    print("YAGEY import summary:")
+    print(f"  source PNGs mapped: {copied_sources}")
+    print(f"  target files changed: {len(changed_targets)}")
+    print(f"  target files already identical: {len(unchanged_targets)}")
+    print(f"  source PNGs with multiple valid targets: {ambiguous_sources}")
+    print(f"  source PNGs without a compatible existing slot: {len(unmatched)}")
+    if changed_targets:
+        print("Changed targets (first 40):")
+        for name in sorted(changed_targets)[:40]:
+            print("  " + name)
+    if unmatched:
+        print("Unmatched source assets (not forced into incompatible slots; first 60):")
+        for name in unmatched[:60]:
+            print("  " + name)
 
 if __name__ == "__main__":
     main()

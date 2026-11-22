@@ -27,11 +27,11 @@ jobs:
       - name: Commit imported textures
         run: |
           if git diff --quiet; then
-            echo "No unambiguous texture matches found; inspect the import report above."
+            echo "No texture files changed. Check whether mapped images are already identical."
             exit 0
           fi
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add mods
-          git commit -m "Import matching textures from YAGEY pack"
+          git commit -m "Import YAGEY textures into matching game assets"
           git push
