@@ -1,16 +1,14 @@
 <div align="center">
-    <img src="menu/icon.png">
-    <h1> Donorcraft </h1>
-    <a href="https://content.luanti.org/packages/ryvnf/mineclonia/"><img src="https://content.luanti.org/packages/ryvnf/mineclonia/shields/downloads/" alt="ContentDB"></a>
-    <a href="https://mineclonia.codeberg.page/wiki/"><img src="https://custom-icon-badges.demolab.com/badge/Read_the_Wiki-blue?logo=book&logoColor=white" alt="Read the Wiki"></a>
-    <a href="https://translate.codeberg.org/engage/mineclonia/"><img src="https://translate.codeberg.org/widget/mineclonia/svg-badge.svg" alt="Translation status"></a>
+    <img src="menu/icon.png" alt="Donorcraft logo">
+    <h1>Donorcraft</h1>
+    <p>A survival sandbox built for exploration, crafting, and multiplayer adventures.</p>
 </div>
 
 Donorcraft is a Minecraft-inspired survival sandbox game for Luanti (formerly Minetest). It is based on the open-source Mineclonia project and retains the original contributors' credits and applicable license notices. Donorcraft is an independent community project and is not affiliated with or endorsed by Mojang.
 
 Version: 0.124.1
 
-### Differences from VoxeLibre (formerly MineClone2)
+### Game features
 * Overworld depth increased from 64 to 128 nodes
 * Improved nether portals
 * Improved leaf decay
@@ -106,7 +104,7 @@ To install Donorcraft (if you haven't already), move this directory into the
 Luanti to learn more.
 
 ## Useful links
-For upstream history, original contributors, and license information, see [CREDITS.md](CREDITS.md) and [LEGAL.md](LEGAL.md). Donorcraft development and issue tracking take place in this repository.
+Donorcraft is based on Mineclonia. The original contributors and required license notices are preserved in [CREDITS.md](CREDITS.md) and [LEGAL.md](LEGAL.md). Donorcraft development and issue tracking take place in this repository.
 
 ## Project description
 The main goal of **Donorcraft** is to be a stable and performant Minecraft-inspired sandbox game for Luanti, continuing work based on Mineclonia.

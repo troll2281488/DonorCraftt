@@ -59,41 +59,18 @@ core.register_on_leaveplayer(function(player)
 	mcl_credits.players[player:get_player_name()] = nil
 end)
 
-core.register_globalstep(function(_)
+core.register_globalstep(function(dtime)
 	for _, huds in pairs(mcl_credits.players) do
 		local player = huds.player
 		local control = player:get_player_control()
-		if not huds.new and control.sneak then
+		if control.sneak then
 			mcl_credits.hide(player)
 		else
-			local moving = {}
-			local any
-			for id, y in pairs(huds.moving) do
-				y = y - 1
-
-				if control.jump then
-					y = y - 2
-					if control.aux1 then
-						y = y - 5
-					end
-				end
-
-				if y > -100 then
-					if id == huds.icon then
-						y = math.max(400, y)
-					else
-						any = true
-					end
-					player:hud_change(id, "offset", {x = 0, y = y})
-					moving[id] = y
-				end
-			end
-			if not any then
+			huds.timer = (huds.timer or 8) - dtime
+			if huds.timer <= 0 then
 				mcl_credits.hide(player)
 			end
-			huds.moving = moving
 		end
-		huds.new = false
 	end
 end)
 
