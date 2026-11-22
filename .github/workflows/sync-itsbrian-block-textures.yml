@@ -1,0 +1,42 @@
+name: Sync ItsBrian block textures
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - ".github/workflows/sync-itsbrian-block-textures.yml"
+      - "tools/sync_itsbrian_block_textures.py"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  replace-block-textures:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Donorcraft
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+      - name: Checkout ItsBrian texture source
+        uses: actions/checkout@v4
+        with:
+          repository: ItsBrian/minecraft-textures
+          ref: main
+          path: /tmp/itsbrian-textures
+          fetch-depth: 1
+      - name: Replace matching block textures
+        run: |
+          python3 tools/sync_itsbrian_block_textures.py --source /tmp/itsbrian-textures/block --repo .
+      - name: Commit texture replacement
+        run: |
+          if git diff --quiet -- mods/ITEMS; then
+            echo "No texture changes to commit."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add mods/ITEMS
+          git commit -m "Replace matching block textures with ItsBrian Minecraft textures"
+          git push
