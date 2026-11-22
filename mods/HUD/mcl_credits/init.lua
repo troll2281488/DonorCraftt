@@ -23,72 +23,24 @@ function mcl_credits.show(player)
 	if mcl_credits.players[name] then
 		return
 	end
+	-- Keep upstream attribution unobtrusive during play. Full author lists and
+	-- license details remain available in CREDITS.md and LEGAL.md.
 	local huds = {
-		new = true,		-- workaround for MT < 5.5 (sending hud_add and hud_remove in the same tick)
+		new = true,
 		player = player,
 		moving = {},
-		ids = {
-			player:hud_add({
-				type = "image",
-				text = "credits_bg.png",
-				position = {x = 0, y = 0},
-				alignment = {x = 1, y = 1},
-				scale = {x = -100, y = -100},
-				z_index = 1000,
-			}),
-			player:hud_add({
-				type = "text",
-				text = S("Sneak to skip"),
-				position = {x = 1, y = 1},
-				alignment = {x = -1, y = -1},
-				offset = {x = -5, y = -5},
-				z_index = 1001,
-				number = 0xFFFFFF,
-			}),
-			player:hud_add({
-				type = "text",
-				text = "  "..S("Jump to speed up (additionally sprint)"),
-				position = {x = 0, y = 1},
-				alignment = {x = 1, y = -1},
-				offset = {x = -5, y = -5},
-				z_index = 1002,
-				number = 0xFFFFFF,
-			}),
-		},
+		ids = {},
 	}
-	add_hud_element({
+	local id = player:hud_add({
 		type = "text",
-		text = "Donorcraft",
-		number = 0xFFFFFF,
-		scale = {x = 6, y = 6},
-	}, huds, 300)
-	add_hud_element({
-		type = "text",
-		text = mcl_credits.description,
-		number = 0x757575,
-		scale = {x = 5, y = 5},
-	}, huds, 350)
-	local y = 450
-	for _, group in ipairs(mcl_credits.people) do
-		add_hud_element({
-			type = "text",
-			text = group[1],
-			number = group[2],
-			scale = {x = 3, y = 3},
-		}, huds, y)
-		y = y + 25
-		for _, name in ipairs(group[3]) do
-			y = y + 25
-			add_hud_element({
-				type = "text",
-				text = name,
-				number = 0xFFFFFF,
-				scale = {x = 1, y = 1},
-			}, huds, y)
-		end
-		y = y + 200
-	end
-
+		text = S("Donorcraft is based on Mineclonia • see CREDITS.md for authors"),
+		position = {x = 1, y = 1},
+		alignment = {x = -1, y = -1},
+		offset = {x = -12, y = -12},
+		number = 0xB8B8B8,
+		z_index = 1001,
+	})
+	table.insert(huds.ids, id)
 	mcl_credits.players[name] = huds
 end
 
@@ -146,7 +98,7 @@ core.register_globalstep(function(_)
 end)
 
 core.register_chatcommand("endcredits", {
-	description = S("Show the Donorcraft end credits"),
+	description = S("Show Donorcraft attribution"),
 	func = function(name, _)
 		mcl_credits.show(core.get_player_by_name(name))
 

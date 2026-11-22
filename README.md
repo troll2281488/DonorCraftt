@@ -1,13 +1,12 @@
 <div align="center">
-    <img src="https://codeberg.org/mineclonia/mineclonia/raw/branch/main/menu/icon.png">
+    <img src="menu/icon.png">
     <h1> Donorcraft </h1>
     <a href="https://content.luanti.org/packages/ryvnf/mineclonia/"><img src="https://content.luanti.org/packages/ryvnf/mineclonia/shields/downloads/" alt="ContentDB"></a>
     <a href="https://mineclonia.codeberg.page/wiki/"><img src="https://custom-icon-badges.demolab.com/badge/Read_the_Wiki-blue?logo=book&logoColor=white" alt="Read the Wiki"></a>
     <a href="https://translate.codeberg.org/engage/mineclonia/"><img src="https://translate.codeberg.org/widget/mineclonia/svg-badge.svg" alt="Translation status"></a>
 </div>
 
-Donorcraft is a Minecraft-inspired survival sandbox game for Luanti (formerly Minetest), based on the Mineclonia project. It keeps the upstream project credits and legal notices while presenting its own Donorcraft identity. For information about migrating from VoxeLibre
-(formerly MineClone2) to Mineclonia, see [VoxeLibre Refugee's Guide](https://mineclonia.codeberg.page/wiki/intros/voxelibre-guide.html).
+Donorcraft is a Minecraft-inspired survival sandbox game for Luanti (formerly Minetest). It is based on the open-source Mineclonia project and retains the original contributors' credits and applicable license notices. Donorcraft is an independent community project and is not affiliated with or endorsed by Mojang.
 
 Version: 0.124.1
 
@@ -97,27 +96,20 @@ Use the `/giveme` chat command to obtain them. See the in-game help for
 an explanation.
 
 ## Installation
-This game requires [Luanti](https://luanti.org) to run (version 5.10 or
+Donorcraft requires [Luanti](https://luanti.org) to run (version 5.10 or
 later). So you need to install Luanti first. Only stable versions of Luanti
-are officially supported. There is no support for running Mineclonia in
+are officially supported. There is no support for running Donorcraft in
 development versions of Luanti.
 
-To install Mineclonia (if you haven't already), move this directory into the
+To install Donorcraft (if you haven't already), move this directory into the
 “games” directory of your Luanti data directory. Consult the help of
 Luanti to learn more.
 
 ## Useful links
-The Mineclonia repository is hosted at [Codeberg](https://codeberg.org).
-To contribute or report issues, head there.
-
-* Codeberg: <https://codeberg.org/mineclonia/mineclonia>
-* ContentDB: <https://content.luanti.org/packages/ryvnf/mineclonia/>
-* Discord:  https://discord.gg/WAwpPWHTXZ
-* Matrix: #mineclonia:matrix.org
+For upstream history, original contributors, and license information, see [CREDITS.md](CREDITS.md) and [LEGAL.md](LEGAL.md). Donorcraft development and issue tracking take place in this repository.
 
 ## Project description
-The main goal of **Mineclonia** is to be a stable and performant clone of
-Minecraft released as free software.
+The main goal of **Donorcraft** is to be a stable and performant Minecraft-inspired sandbox game for Luanti, continuing work based on Mineclonia.
 
 * Minecraft is aimed to be cloned as well as Luanti currently permits without
   resorting to hacks which are too heavyweight or complicated to maintain

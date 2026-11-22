@@ -1,6 +1,9 @@
-# Credits
+# Donorcraft — original project credits
 
-## Creators of Mineclonia
+Donorcraft is based on the Mineclonia project. The following contributors and original mod authors are credited for the upstream work included in this repository. Names are retained to preserve attribution.
+
+
+## Original Mineclonia creators
 * ryvnf
 * cora
 

@@ -1,11 +1,13 @@
-# Legal information
+# Donorcraft — legal information
+
+Donorcraft is an independent community project based on Mineclonia. It is not developed, endorsed, or affiliated with Mojang AB or Microsoft.
 This is a fan game, not developed or endorsed by Mojang AB.
 
 Copying is an act of love. Please copy and share! <3
 Here's the detailed legalese for those who need it:
 
 ## License of source code
-Mineclonia is an imitation of Minecraft.
+Donorcraft is based on the Mineclonia source project. The upstream source code and included components remain subject to their respective licenses.
 
 Mineclonia is free software: you can redistribute it and/or modify it under the
 terms of the GNU General Public License as published by the Free Software
