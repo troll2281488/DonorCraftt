@@ -33,6 +33,11 @@ def main():
     for target in targets:
         stem = target.stem
         candidates = [stem]
+        # Mineclonia commonly prefixes block files with their owning mod name,
+        # e.g. mcl_amethyst_amethyst_block.png -> amethyst_block.png.
+        module_name = target.parent.parent.name
+        if stem.startswith(module_name + "_"):
+            candidates.append(stem[len(module_name) + 1:])
         candidates.extend(stem[len(prefix):] for prefix in PREFIXES
                           if stem.startswith(prefix))
         source_file = next((sources[name] for name in candidates
