@@ -4,10 +4,15 @@ on:
   push:
     paths:
       - "yagey.zip"
+      - "tools/import_yagey_textures.py"
       - ".github/workflows/import-yagey.yml"
 
 permissions:
   contents: write
+
+concurrency:
+  group: yagey-texture-import
+  cancel-in-progress: false
 
 jobs:
   import:
@@ -15,12 +20,14 @@ jobs:
     steps:
       - name: Checkout Donorcraft
         uses: actions/checkout@v4
-      - name: Import unambiguous texture matches
-        run: python3 tools/import_yagey_textures.py
+      - name: Verify archive and import matching textures
+        run: |
+          test -f yagey.zip
+          python3 tools/import_yagey_textures.py
       - name: Commit imported textures
         run: |
           if git diff --quiet; then
-            echo "No unambiguous texture matches to import."
+            echo "No unambiguous texture matches found; inspect the import report above."
             exit 0
           fi
           git config user.name "github-actions[bot]"
