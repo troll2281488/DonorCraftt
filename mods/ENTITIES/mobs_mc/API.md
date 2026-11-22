@@ -1,3 +1,4 @@
+{% raw %}
 ## Public API
 
 This sections covers functions for use in external mods.
@@ -120,3 +121,5 @@ mcl_villages as well as mobs_mc.
 
 	mobs_mc.register_villager(profession, poi, trades, gifts)
 ```
+
+{% endraw %}
